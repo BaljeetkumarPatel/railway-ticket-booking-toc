@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Railway Ticket Booking System - TOC Simulator</title>
+    <style>
+        :root {
+            --primary: #5B4FE8;
+            --primary-hover: #4B3FD8;
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --info: #3B82F6;
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --gray-400: #9CA3AF;
+            --gray-500: #6B7280;
+            --gray-600: #4B5563;
+            --gray-700: #374151;
+            --gray-800: #1F2937;
+            --gray-900: #111827;
+            --white: #FFFFFF;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --radius-sm: 0.25rem;
+            --radius-md: 0.375rem;
+            --radius-lg: 0.5rem;
+            --radius-xl: 0.75rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+            color: var(--gray-900);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .app-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, #764ba2 100%);
+            color: var(--white);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-md);
+        }
+
+        .header-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .mode-toggle {
+            display: flex;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem;
+            border-radius: var(--radius-lg);
+        }
+
+        .mode-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            background: transparent;
+            color: var(--white);
+            cursor: pointer;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .mode-btn.active {
+            background: var(--white);
+            color: var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+
+        .main-content {
+            display: flex;
+            min-height: calc(100vh - 120px);
+        }
+
+        .left-panel {
+            width: 40%;
+            padding: 1.5rem;
+            background: var(--gray-50);
+            border-right: 2px solid var(--gray-200);
+            overflow-y: auto;
+        }
+
+        .right-panel {
+            width: 60%;
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .panel-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gray-800);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .panel-subtitle {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+            margin-bottom: 1.5rem;
+        }
+
+        .section {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 1rem;
+        }
+
+        .state-diagram {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            margin-bottom: 1rem;
+            overflow-x: auto;
+        }
+
+        .states-container {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            min-width: max-content;
+            padding: 1rem 0;
+        }
+
+        .state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .state-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid var(--gray-300);
+            background: var(--white);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .state-circle.current {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: 0 0 0 4px rgba(91, 79, 232, 0.2);
+            transform: scale(1.1);
+        }
+
+        .state-circle.visited {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .state-circle.error {
+            border-color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .state-label {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+            text-align: center;
+            max-width: 80px;
+        }
+
+        .state-arrow {
+            color: var(--gray-400);
+            font-size: 1.5rem;
+            margin: 0 -0.5rem;
+        }
+
+        .token-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--gray-300);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .token-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(91, 79, 232, 0.1);
+        }
+
+        .token-palette {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .token-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--gray-300);
+            background: var(--white);
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Courier New', monospace;
+        }
+
+        .token-btn:hover {
+            border-color: var(--primary);
+            background: rgba(91, 79, 232, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: var(--white);
+        }
+
+        .btn-success:hover {
+            background: #0d9668;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: var(--white);
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-info {
+            background: var(--info);
+            color: var(--white);
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: var(--white);
+        }
+
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-300);
+        }
+
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .speed-slider {
+            flex: 1;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--gray-200);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .speed-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+
+        .execution-log {
+            max-height: 200px;
+            overflow-y: auto;
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            padding: 0.75rem;
+        }
+
+        .log-entry {
+            font-size: 0.875rem;
+            color: var(--gray-700);
+            padding: 0.25rem 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .log-entry.success {
+            color: var(--success);
+        }
+
+        .log-entry.error {
+            color: var(--danger);
+        }
+
+        .token-legend {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .legend-token {
+            background: var(--gray-200);
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+        }
+
+        .step-indicator {
+            background: var(--primary);
+            color: var(--white);
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .input-field {
+            flex: 1;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 0.5rem;
+        }
+
+        .input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--gray-300);
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+        }
+
+        .input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(91, 79, 232, 0.1);
+        }
+
+        .selection-display {
+            background: var(--gray-50);
+            padding: 0.75rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--gray-200);
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-top: 0.5rem;
+        }
+
+        .train-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+
+        .train-btn {
+            padding: 1rem;
+            border: 2px solid var(--gray-300);
+            background: var(--white);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .train-btn:hover {
+            border-color: var(--primary);
+            background: rgba(91, 79, 232, 0.05);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .train-btn.selected {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .train-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .train-code {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+
+        .seat-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.75rem;
+        }
+
+        .seat-btn {
+            padding: 0.75rem;
+            border: 2px solid var(--gray-300);
+            background: var(--white);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 600;
+        }
+
+        .seat-btn:hover {
+            border-color: var(--primary);
+            background: rgba(91, 79, 232, 0.05);
+            transform: scale(1.05);
+        }
+
+        .seat-btn.selected {
+            border-color: var(--success);
+            background: var(--success);
+            color: var(--white);
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+        }
+
+        .ticket-display {
+            background: linear-gradient(135deg, var(--primary) 0%, #764ba2 100%);
+            color: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .ticket-header {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .ticket-body {
+            background: var(--white);
+            color: var(--gray-900);
+            padding: 1.25rem;
+            border-radius: var(--radius-md);
+        }
+
+        .ticket-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .ticket-row:last-child {
+            border-bottom: none;
+        }
+
+        .ticket-label {
+            font-weight: 600;
+            color: var(--gray-600);
+        }
+
+        .ticket-value {
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .no-ticket {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray-400);
+            font-style: italic;
+        }
+
+        .stack-visualization {
+            background: var(--white);
+            border: 2px solid var(--primary);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .stack-title {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            text-align: center;
+        }
+
+        .stack-items {
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 0.5rem;
+        }
+
+        .stack-item {
+            background: var(--gray-100);
+            padding: 0.5rem;
+            border-radius: var(--radius-sm);
+            border-left: 4px solid var(--primary);
+            font-size: 0.875rem;
+            font-family: 'Courier New', monospace;
+        }
+
+        .stack-item:last-child {
+            background: rgba(91, 79, 232, 0.1);
+            font-weight: 600;
+        }
+
+        .section.active {
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 0 4px rgba(91, 79, 232, 0.1);
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                flex-direction: column;
+            }
+            .left-panel, .right-panel {
+                width: 100%;
+                border-right: none;
+                border-bottom: 2px solid var(--gray-200);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <div class="header-title">
+                <span>🚆</span>
+                <span>Railway Ticket Booking System - TOC Simulator</span>
+            </div>
+            <div class="mode-toggle">
+                <button class="mode-btn active" id="dfaMode">DFA Mode</button>
+                <button class="mode-btn" id="pdaMode">PDA Mode</button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <!-- LEFT PANEL -->
+            <div class="left-panel">
+                <div class="panel-title">⚙️ Automaton (TOC)</div>
+                <p class="panel-subtitle">DFA / PDA simulation &amp; token controls</p>
+
+                <!-- State Diagram -->
+                <div class="section">
+                    <div class="section-title">State Diagram</div>
+                    <div class="state-diagram">
+                        <div class="states-container" id="statesDiagram">
+                            <!-- States will be rendered here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stack Visualization (PDA Mode) -->
+                <div class="stack-visualization" id="stackVisualization" style="display: none;">
+                    <div class="stack-title">📚 Stack (LIFO)</div>
+                    <div class="stack-items" id="stackItems">
+                        <div class="stack-item">Start</div>
+                    </div>
+                </div>
+
+                <!-- Token Input -->
+                <div class="section">
+                    <div class="section-title">Input Token Sequence</div>
+                    <textarea class="token-input" id="tokenInput" placeholder="Enter tokens...">S T C H P+ I E</textarea>
+                    
+                    <div class="section-title" style="margin-top: 1rem;">Token Palette</div>
+                    <div class="token-palette">
+                        <button class="token-btn" onclick="addToken('S')">S</button>
+                        <button class="token-btn" onclick="addToken('T')">T</button>
+                        <button class="token-btn" onclick="addToken('C')">C</button>
+                        <button class="token-btn" onclick="addToken('H')">H</button>
+                        <button class="token-btn" onclick="addToken('P+')">P+</button>
+                        <button class="token-btn" onclick="addToken('P-')">P-</button>
+                        <button class="token-btn" onclick="addToken('I')">I</button>
+                        <button class="token-btn" onclick="addToken('R')">R</button>
+                        <button class="token-btn" onclick="addToken('E')">E</button>
+                        <button class="token-btn btn-secondary" onclick="undoToken()">Undo</button>
+                        <button class="token-btn btn-secondary" onclick="clearTokens()">Clear</button>
+                    </div>
+                </div>
+
+                <!-- Control Buttons -->
+                <div class="section">
+                    <div class="section-title">Controls</div>
+                    <div class="control-buttons">
+                        <button class="btn btn-primary" onclick="stepToken()">▶️ Step</button>
+                        <button class="btn btn-success" onclick="runAll()">⚡ Run All</button>
+                        <button class="btn btn-danger" onclick="reset()">🔄 Reset</button>
+                    </div>
+                    <div class="speed-control">
+                        <label style="font-size: 0.875rem; font-weight: 600;">Speed:</label>
+                        <input type="range" class="speed-slider" id="speedSlider" min="100" max="2000" value="1000" step="100">
+                        <span id="speedValue" style="font-size: 0.875rem; font-weight: 600;">1.0s</span>
+                    </div>
+                </div>
+
+                <!-- Execution Log -->
+                <div class="section">
+                    <div class="section-title">Execution Log</div>
+                    <div class="execution-log" id="executionLog">
+                        <div class="log-entry">System initialized. Ready to process tokens.</div>
+                    </div>
+                </div>
+
+                <!-- Token Legend -->
+                <div class="section">
+                    <div class="section-title">Token Meanings</div>
+                    <div class="token-legend">
+                        <div class="legend-item"><span class="legend-token">S</span> Select Journey</div>
+                        <div class="legend-item"><span class="legend-token">T</span> Choose Train</div>
+                        <div class="legend-item"><span class="legend-token">C</span> Choose Seat</div>
+                        <div class="legend-item"><span class="legend-token">H</span> Hold Seat</div>
+                        <div class="legend-item"><span class="legend-token">P+</span> Payment Success</div>
+                        <div class="legend-item"><span class="legend-token">P-</span> Payment Fail</div>
+                        <div class="legend-item"><span class="legend-token">I</span> Issue Ticket</div>
+                        <div class="legend-item"><span class="legend-token">R</span> Rollback</div>
+                        <div class="legend-item"><span class="legend-token">E</span> End Session</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT PANEL -->
+            <div class="right-panel">
+                <div class="panel-title">🎫 Real Booking Flow</div>
+                <p class="panel-subtitle">Visualize what each token means in the real system</p>
+
+                <div class="step-indicator" id="stepIndicator">Step 0/7 - Ready to Start</div>
+
+                <!-- Journey Selection -->
+                <div class="section" id="section-journey">
+                    <div class="section-title">1️⃣ Journey Selection (Token: S)</div>
+                    <div class="input-group">
+                        <div class="input-field">
+                            <label class="input-label">From (Source)</label>
+                            <input type="text" class="input" id="fromInput" placeholder="e.g., Mumbai" value="Mumbai">
+                        </div>
+                        <div class="input-field">
+                            <label class="input-label">To (Destination)</label>
+                            <input type="text" class="input" id="toInput" placeholder="e.g., Delhi" value="Delhi">
+                        </div>
+                    </div>
+                    <div class="selection-display" id="journeyDisplay">Selected: --</div>
+                </div>
+
+                <!-- Train Selection -->
+                <div class="section" id="section-train">
+                    <div class="section-title">2️⃣ Choose Train (Token: T)</div>
+                    <div class="train-grid" id="trainGrid">
+                        <!-- Trains will be rendered here -->
+                    </div>
+                    <div class="selection-display" id="trainDisplay">Selected train: --</div>
+                </div>
+
+                <!-- Seat Selection -->
+                <div class="section" id="section-seat">
+                    <div class="section-title">3️⃣ Select Seat (Token: C)</div>
+                    <div class="seat-grid" id="seatGrid">
+                        <!-- Seats will be rendered here -->
+                    </div>
+                    <div class="selection-display" id="seatDisplay">Selected seat: --</div>
+                </div>
+
+                <!-- Hold & Payment -->
+                <div class="section" id="section-payment">
+                    <div class="section-title">4️⃣ Hold Seat &amp; Payment</div>
+                    <div class="action-buttons">
+                        <button class="btn btn-info" onclick="simulateAction('hold')">🔒 Hold Seat (H)</button>
+                        <button class="btn btn-success" onclick="simulateAction('payment-success')">✅ Payment Success (P+)</button>
+                        <button class="btn btn-danger" onclick="simulateAction('payment-fail')">❌ Payment Fail (P-)</button>
+                    </div>
+                    <div class="selection-display" id="holdDisplay" style="margin-top: 1rem;">Held seats: --</div>
+                </div>
+
+                <!-- Ticket Actions -->
+                <div class="section" id="section-actions">
+                    <div class="section-title">5️⃣ Ticket Actions</div>
+                    <div class="action-buttons">
+                        <button class="btn btn-info" onclick="simulateAction('issue')">🎫 Issue Ticket (I)</button>
+                        <button class="btn btn-warning" onclick="simulateAction('rollback')">↩️ Rollback (R)</button>
+                        <button class="btn btn-secondary" onclick="simulateAction('end')">🏁 End Session (E)</button>
+                    </div>
+                </div>
+
+                <!-- Ticket Display -->
+                <div class="section" id="section-ticket">
+                    <div class="section-title">6️⃣ Generated Ticket</div>
+                    <div id="ticketContainer">
+                        <div class="no-ticket">No ticket yet. Complete the booking process to generate a ticket.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
