@@ -52,14 +52,16 @@ These concepts ensure correctness, predictability, and structured execution.
 
 ## 📂 Project Structure
 
+```text
 railway-ticket-booking-toc/
 │
-├── index.html # Main user interface
-├── style.css # Application styling
-├── script.js # Core logic & TOC-based flow
-├── assets/ # Images / icons (if any)
+├── index.html        # Main user interface
+├── style.css         # Application styling
+├── script.js         # Core logic & TOC-based flow
+├── assets/           # Images / icons (if any)
 │
-└── README.md # Project documentation
+└── README.md         # Project documentation
+
 
 
 ---
