@@ -67,12 +67,32 @@ railway-ticket-booking-toc/
 1. Clone the repository:
    ```bash
    git clone https://github.com/BaljeetkumarPatel/railway-ticket-booking-toc.git
+   ```
    
 2. Navigate to the project folder:
   ```bash
   cd railway-ticket-booking-toc
+```
 
 
 3. Open index.html in your browser:
    ```bash
-   start index.html
+    start index.html
+   ```
+
+
+## 🧪Sample Workflow
+
+Launch the application
+
+Select train and journey details
+
+Enter passenger information
+
+Validate inputs
+
+Confirm booking
+
+Display booking confirmation
+
+Each step represents a state transition in a finite automaton.
