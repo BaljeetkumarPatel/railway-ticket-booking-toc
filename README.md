@@ -71,6 +71,7 @@ railway-ticket-booking-toc/
 2.Navigate to the project folder:
   ```bash
   cd railway-ticket-booking-toc
+
 3.Open index.html in your browser:
  ```bash
   start index.html
