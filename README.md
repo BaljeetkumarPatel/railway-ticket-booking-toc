@@ -83,16 +83,12 @@ railway-ticket-booking-toc/
 
 ## 🧪Sample Workflow
 
-Launch the application
-
-Select train and journey details
-
-Enter passenger information
-
-Validate inputs
-
-Confirm booking
-
-Display booking confirmation
+-Launch the application
+-Select train and journey details
+-Enter passenger information
+-Validate inputs
+-Confirm booking
+-Display booking confirmation
 
 Each step represents a state transition in a finite automaton.
+---
