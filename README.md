@@ -91,4 +91,43 @@ railway-ticket-booking-toc/
 - Display booking confirmation
 
 Each step represents a state transition in a finite automaton.
+
+ ## 🎯 Learning Outcomes
+
+- Strong understanding of Theory of Computation
+- Practical use of Finite State Machines
+- Mapping theory to real-world software systems
+- Improved logical thinking and system design
  ---
+ 
+## 🔮 Future Enhancements
+
+- 💾 Database integration
+- 🔑 Secure authentication
+- 📱 Fully responsive UI
+- 📊 Booking history & analytics
+- 🌐 Backend support (Node.js / Express)
+
+---
+
+## 👨‍💻 Author
+
+**Baljeet Kumar Patel**
+
+- **GitHub:** https://github.com/BaljeetkumarPatel
+- **Portfolio:** https://baljeetkumarpatel.vercel.app
+- **LinkedIn:** https://www.linkedin.com/in/baljeet-kumar-patel-11b3b327b/
+
+## ⭐ Support
+If you found this project helpful:
+
+ - 🌟 Star the repository
+
+ - 🍴 Fork it
+
+ - 🧠 Use it for learning & reference
+
+## 📜 License
+
+This project is created for **educational purposes only**.
+Free to use and modify for academic learning.
