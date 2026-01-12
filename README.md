@@ -53,9 +53,24 @@ These concepts ensure correctness, predictability, and structured execution.
 ## 📂 Project Structure
 
 railway-ticket-booking-toc/
-│
 ├── index.html # Main UI
 ├── style.css # Styling
 ├── script.js # Core logic & TOC-based flow
 ├── assets/ # Images / icons (if any)
 └── README.md # Project documentation
+
+
+---
+
+## 🚀 How to Run the Project
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/BaljeetkumarPatel/railway-ticket-booking-toc.git
+   
+2.Navigate to the project folder:
+  ```bash
+  cd railway-ticket-booking-toc
+3.Open index.html in your browser:
+ ```bash
+  start index.html
