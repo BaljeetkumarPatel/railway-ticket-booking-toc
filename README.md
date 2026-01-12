@@ -68,10 +68,11 @@ railway-ticket-booking-toc/
    ```bash
    git clone https://github.com/BaljeetkumarPatel/railway-ticket-booking-toc.git
    
-2.Navigate to the project folder:
+2. Navigate to the project folder:
   ```bash
   cd railway-ticket-booking-toc
 
-3.Open index.html in your browser:
- ```bash
-  start index.html
+
+3. Open index.html in your browser:
+   ```bash
+   start index.html
